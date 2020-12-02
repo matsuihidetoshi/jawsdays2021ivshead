@@ -7,7 +7,7 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - Matsui Hidetoshi',
+    titleTemplate: '%s - JAWS DAYS 2021',
     title: 'JAWS DAYS 2021',
     meta: [
       { charset: 'utf-8' },

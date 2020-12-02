@@ -6,7 +6,9 @@
       cols="12"
       md="6"
     >
-      <v-card>
+      <v-card
+        :to="'/' + stream.name"
+      >
         <video :id="'video-player-' + index" width="100%" controls playsinline />
 
         <v-card-text>
@@ -28,20 +30,11 @@ import { Component, Vue } from 'nuxt-property-decorator'
     }
   },
   mounted () {
-    this.readIVSScript().then(() => {
-      this.streams.forEach((stream, index) => {
-        this.startStream(stream, index)
-      })
+    this.streams.forEach((stream, index) => {
+      this.startStream(stream, index)
     })
   },
   methods: {
-    async readIVSScript () {
-      const readScript = document.createElement('script')
-      readScript.src = 'https://player.live-video.net/1.0.0/amazon-ivs-player.min.js'
-      readScript.async = true
-      await document.body.appendChild(readScript)
-      return readScript
-    },
     startStream (stream, index) {
       const script = document.createElement('script')
       script.innerHTML = `

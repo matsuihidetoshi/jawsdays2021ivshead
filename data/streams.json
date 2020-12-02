@@ -1,18 +1,18 @@
 [
   {
-    "name": "test1",
+    "name": "session-1",
     "url": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"
   },
   {
-    "name": "test2",
+    "name": "session-2",
     "url": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"
   },
   {
-    "name": "test3",
+    "name": "session-3",
     "url": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"
   },
   {
-    "name": "test4",
+    "name": "session-4",
     "url": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"
   }
 ]

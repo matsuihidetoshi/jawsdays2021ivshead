@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+import streams from './data/streams.json'
 
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
@@ -113,8 +114,11 @@ export default {
 
   generate: {
     routes () {
-      const { $content } = require('@nuxt/content')
-      return $content.database.items._data.map((data: any) => data.path === '/index' ? '/' : data.path)
+      interface Stream {
+        name: string
+        url: string
+      }
+      return streams.map(( stream: Stream ) => '/' + stream.name)
     }
   },
 

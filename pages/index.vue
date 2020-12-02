@@ -7,7 +7,7 @@
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
 import streams from '~/data/streams.json'
-import PlayerIndex from '~/components/players/Index.vue'
+import PlayerIndex from '~/components/streams/Index.vue'
 
 @Component({
   components: {

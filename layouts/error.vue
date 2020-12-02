@@ -13,7 +13,9 @@
 </template>
 
 <script>
-export default {
+import { Component, Vue } from 'nuxt-property-decorator'
+
+@Component({
   layout: 'empty',
   props: {
     error: {
@@ -34,7 +36,9 @@ export default {
       title
     }
   }
-}
+})
+
+export default class Error extends Vue { }
 </script>
 
 <style scoped>

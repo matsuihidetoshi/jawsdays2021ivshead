@@ -6,12 +6,24 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - jawsdays2021ivshead',
-    title: 'jawsdays2021ivshead',
+    titleTemplate: '%s - Matsui Hidetoshi',
+    title: 'JAWS DAYS 2021',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: 'JAWS DAYS 2021 セッション配信サイト' },
+      { hid: 'keywords', name: 'keywords', content: 'AWS, JAWS, 配信, セッション' },
+      { hid: 'og:site_name', property: 'og:site_name', content: 'JAWS DAYS 2021' },
+      { hid: 'og:type', property: 'og:type', content: 'website' },
+      { hid: 'og:url', property: 'og:url', content: process.env.BASE_URL || 'http://localhost:3000' },
+      { hid: 'og:title', property: 'og:title', content: 'JAWS DAYS 2021' },
+      { hid: 'og:description', property: 'og:description', content: 'JAWS DAYS 2021 セッション配信サイト' },
+      { hid: 'og:image', property: 'og:image', content: (process.env.BASE_URL || 'http://localhost:3000') + '/icon.png' }
+    ],
+    script: [
+      {
+        src: 'https://player.live-video.net/1.0.0/amazon-ivs-player.min.js'
+      }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -51,15 +63,16 @@ export default {
   axios: {},
 
   // Content module configuration (https://go.nuxtjs.dev/config-content)
-  content: {},
+  content: {
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
-        dark: {
+        light: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
@@ -72,7 +85,41 @@ export default {
     }
   },
 
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
+
+  pwa: {
+    manifest: {
+      name: 'JAWS DAYS 2021',
+      short_name: 'JD 2021'
+    }
+  },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+    extend(config: any, ctx: any) {
+      // Run ESLint on save
+      if (ctx.isDev && ctx.isClient) {
+        config.module.rules.push({
+          enforce: "pre",
+          test: /\.(js|vue)$/,
+          loader: "eslint-loader",
+          exclude: /(node_modules)/
+        })
+      }
+    }
+  },
+
+  generate: {
+    routes () {
+      const { $content } = require('@nuxt/content')
+      return $content.database.items._data.map((data: any) => data.path === '/index' ? '/' : data.path)
+    }
+  },
+
+  typescript: {
+    typeCheck: true,
+    ignoreNotFoundWarnings: true
   }
 }

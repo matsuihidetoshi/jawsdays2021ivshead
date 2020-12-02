@@ -1,0 +1,22 @@
+[
+  {
+    "icon": "mdi-apps",
+    "title": "Home",
+    "to": "/"
+  },
+  {
+    "icon": "mdi-newspaper-variant-multiple-outline",
+    "title": "アンケート",
+    "to": "/survey"
+  },
+  {
+    "icon": "mdi-information-outline",
+    "title": "About",
+    "to": "/about"
+  },
+  {
+    "icon": "mdi-help-circle-outline",
+    "title": "お問い合わせ",
+    "to": "/contact"
+  }
+]

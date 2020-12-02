@@ -9,7 +9,7 @@
       <v-card
         :to="'/' + stream.name"
       >
-        <video :id="'video-player-' + index" width="100%" controls playsinline />
+        <video :id="'video-player-' + index" width="100%" controls playsinline muted />
 
         <v-card-text>
           {{ stream.url }}

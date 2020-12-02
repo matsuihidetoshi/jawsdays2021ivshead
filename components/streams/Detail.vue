@@ -1,6 +1,14 @@
 <template>
   <v-card>
-    <video :id="'video-player-' + stream.name" width="100%" controls playsinline />
+    <video
+      :id="
+        'video-player-' + stream.name
+      "
+      width="100%"
+      controls
+      playsinline
+    />
+
     <v-card-text>
       {{ stream.url }}
     </v-card-text>

@@ -4,7 +4,8 @@
       v-for="(stream, index) in streams"
       :key="index"
       cols="12"
-      md="6"
+      sm="6"
+      md="4"
     >
       <v-card
         :to="'/' + stream.name"

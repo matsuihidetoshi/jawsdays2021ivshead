@@ -46,10 +46,12 @@ import { Component, Vue } from 'nuxt-property-decorator'
     startStream (stream, index) {
       const script = document.createElement('script')
       script.innerHTML = `
-        var player = IVSPlayer.create()
-        player.attachHTMLVideoElement(document.getElementById('video-player-${index}'))
-        player.load("${stream.url}")
-        player.play()
+        if (typeof player${index} === 'undefined') {
+          const player${index} = IVSPlayer.create()
+          player${index}.attachHTMLVideoElement(document.getElementById('video-player-${index}'))
+          player${index}.load("${stream.url}")
+          player${index}.play()
+        }
       `
       document.body.appendChild(script)
     }

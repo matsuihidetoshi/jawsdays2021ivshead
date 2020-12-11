@@ -15,16 +15,40 @@ import StreamDetail from '~/components/streams/Detail.vue'
   },
   data () {
     return {
-      stream: null
+      stream: null,
+      interval: null
     }
   },
-  created () {
-    this.getStreamById()
+  mounted () {
+    this.getStreamById().then(() => {
+      this.interval = setInterval(() => {
+        this.updateStream()
+      }, 5000)
+    })
+  },
+  beforeDestroy () {
+    clearInterval(this.interval)
   },
   methods: {
     async getStreamById () {
-      const streams = await this.$axios.$get('https://jieauj14v9.execute-api.ap-northeast-1.amazonaws.com/default/getStreamData')
-      this.stream = streams.body.find(stream => stream.id === this.$route.params.id)
+      const response = await this.$axios.$get('https://jieauj14v9.execute-api.ap-northeast-1.amazonaws.com/default/getStreamData')
+      this.stream = response.body.find(stream => stream.id === this.$route.params.id)
+    },
+    async updateStream () {
+      const response = await this.$axios.$get(
+        'https://jieauj14v9.execute-api.ap-northeast-1.amazonaws.com/default/getStreamData',
+        { progress: false }
+      )
+      const stream = response.body.find(stream => stream.id === this.$route.params.id)
+      if (
+        (this.stream.title !== stream.title) ||
+        (this.stream.description !== stream.description) ||
+        (this.stream.active !== stream.active)
+      ) {
+        this.stream.title = stream.title
+        this.stream.description = stream.description
+        this.stream.active = stream.active
+      }
     }
   }
 })

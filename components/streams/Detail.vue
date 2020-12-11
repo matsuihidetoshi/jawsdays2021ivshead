@@ -7,10 +7,20 @@
       width="100%"
       controls
       playsinline
+      :style="'display: ' + hide(stream.active)"
     />
 
+    <v-card-title>
+      {{ stream.title }}
+      <span
+        v-if="!stream.active"
+      >
+        （準備中）
+      </span>
+    </v-card-title>
+
     <v-card-text>
-      {{ stream.url }}
+      {{ stream.description }}
     </v-card-text>
   </v-card>
 </template>
@@ -40,6 +50,13 @@ import { Vue, Component } from 'nuxt-property-decorator'
         }
       `
       document.body.appendChild(script)
+    },
+    hide (active) {
+      if (active) {
+        return 'block'
+      } else {
+        return 'none'
+      }
     }
   }
 })

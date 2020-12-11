@@ -1,16 +1,16 @@
 <template>
   <div>
-    <player-index />
+    <stream-list />
   </div>
 </template>
 
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
-import PlayerIndex from '~/components/streams/Index.vue'
+import StreamList from '~/components/streams/List.vue'
 
 @Component({
   components: {
-    PlayerIndex
+    StreamList
   }
 })
 

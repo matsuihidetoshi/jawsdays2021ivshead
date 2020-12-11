@@ -1,5 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
-import streams from './data/streams.json'
+import axios from 'axios'
 
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
@@ -113,12 +113,14 @@ export default {
   },
 
   generate: {
-    routes () {
-      interface Stream {
-        name: string
-        url: string
-      }
-      return streams.map(( stream: Stream ) => '/' + stream.name)
+    async routes () {
+      let streams: any[] = []
+      await axios.get('https://jieauj14v9.execute-api.ap-northeast-1.amazonaws.com/default/getStreamData').then(response => {
+        streams = response.data.body
+      })
+      return streams.map((stream: any) => {
+        return '/' + stream.id
+      })
     }
   },
 

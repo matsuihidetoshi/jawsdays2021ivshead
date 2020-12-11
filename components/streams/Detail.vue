@@ -2,7 +2,7 @@
   <v-card>
     <video
       :id="
-        'video-player-' + stream.name
+        'video-player-' + stream.id
       "
       width="100%"
       controls
@@ -34,7 +34,7 @@ import { Vue, Component } from 'nuxt-property-decorator'
       script.innerHTML = `
         if (typeof player === 'undefined') {
           const player = IVSPlayer.create()
-          player.attachHTMLVideoElement(document.getElementById('video-player-${stream.name}'))
+          player.attachHTMLVideoElement(document.getElementById('video-player-${stream.id}'))
           player.load("${stream.url}")
           player.play()
         }

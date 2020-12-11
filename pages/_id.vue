@@ -1,10 +1,12 @@
 <template>
-  <stream-detail :stream="stream" />
+  <stream-detail
+    v-if="stream"
+    :stream="stream"
+  />
 </template>
 
 <script>
 import { Vue, Component } from 'nuxt-property-decorator'
-import streams from '~/data/streams.json'
 import StreamDetail from '~/components/streams/Detail.vue'
 
 @Component({
@@ -13,7 +15,6 @@ import StreamDetail from '~/components/streams/Detail.vue'
   },
   data () {
     return {
-      streams,
       stream: null
     }
   },
@@ -21,8 +22,9 @@ import StreamDetail from '~/components/streams/Detail.vue'
     this.getStreamById()
   },
   methods: {
-    getStreamById () {
-      this.stream = streams.find(stream => stream.name === this.$route.params.id)
+    async getStreamById () {
+      const streams = await this.$axios.$get('https://jieauj14v9.execute-api.ap-northeast-1.amazonaws.com/default/getStreamData')
+      this.stream = streams.body.find(stream => stream.id === this.$route.params.id)
     }
   }
 })

@@ -7,7 +7,7 @@
       md="6"
     >
       <v-card
-        :to="'/' + stream.name"
+        :to="'/' + stream.id"
       >
         <video
           :id="
@@ -19,8 +19,12 @@
           muted
         />
 
+        <v-card-title>
+          {{ stream.title }}
+        </v-card-title>
+
         <v-card-text>
-          {{ stream.url }}
+          {{ stream.description }}
         </v-card-text>
       </v-card>
     </v-col>
@@ -31,15 +35,16 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
-  props: {
-    streams: {
-      type: Array,
-      required: true
+  data () {
+    return {
+      streams: []
     }
   },
   mounted () {
-    this.streams.forEach((stream, index) => {
-      this.startStream(stream, index)
+    this.fetchStreams().then(() => {
+      this.streams.forEach((stream, index) => {
+        this.startStream(stream, index)
+      })
     })
   },
   methods: {
@@ -54,6 +59,10 @@ import { Component, Vue } from 'nuxt-property-decorator'
         }
       `
       document.body.appendChild(script)
+    },
+    async fetchStreams () {
+      const streams = await this.$axios.$get('https://jieauj14v9.execute-api.ap-northeast-1.amazonaws.com/default/getStreamData')
+      this.streams = streams.body
     }
   }
 })

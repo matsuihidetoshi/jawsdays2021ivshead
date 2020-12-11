@@ -1,22 +1,16 @@
 <template>
   <div>
-    <player-index :streams="streams" />
+    <player-index />
   </div>
 </template>
 
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
-import streams from '~/data/streams.json'
 import PlayerIndex from '~/components/streams/Index.vue'
 
 @Component({
   components: {
     PlayerIndex
-  },
-  data () {
-    return {
-      streams
-    }
   }
 })
 

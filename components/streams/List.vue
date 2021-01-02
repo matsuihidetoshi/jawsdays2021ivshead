@@ -35,12 +35,6 @@
       </v-card>
     </v-col>
 
-    <v-btn
-      @click="updateStreams()"
-    >
-      update
-    </v-btn>
-
     <v-overlay
       :value="loading"
     >

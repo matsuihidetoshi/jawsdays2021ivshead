@@ -87,12 +87,12 @@ import { Component, Vue } from 'nuxt-property-decorator'
       document.body.appendChild(script)
     },
     async fetchStreams () {
-      const response = await this.$axios.$get('https://jieauj14v9.execute-api.ap-northeast-1.amazonaws.com/default/getStreamData')
+      const response = await this.$axios.$get('https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData')
       this.streams = response.body
     },
     async updateStreams () {
       const streams = await this.$axios.$get(
-        'https://jieauj14v9.execute-api.ap-northeast-1.amazonaws.com/default/getStreamData',
+        'https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData',
         { progress: false }
       )
       streams.body.forEach((stream, index) => {

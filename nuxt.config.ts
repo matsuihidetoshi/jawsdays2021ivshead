@@ -115,7 +115,7 @@ export default {
   generate: {
     async routes () {
       let streams: any[] = []
-      await axios.get('https://jieauj14v9.execute-api.ap-northeast-1.amazonaws.com/default/getStreamData').then(response => {
+      await axios.get('https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData').then(response => {
         streams = response.data.body
       })
       return streams.map((stream: any) => {

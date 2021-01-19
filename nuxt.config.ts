@@ -119,7 +119,7 @@ export default {
         streams = response.data.body
       })
       return streams.map((stream: any) => {
-        return '/' + stream.id
+        return '/' + stream.slug
       })
     }
   },

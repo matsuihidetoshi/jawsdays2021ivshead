@@ -32,14 +32,14 @@ import StreamDetail from '~/components/streams/Detail.vue'
   methods: {
     async getStreamById () {
       const response = await this.$axios.$get('https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData')
-      this.stream = response.body.find(stream => stream.id === this.$route.params.id)
+      this.stream = response.body.find(stream => stream.slug === this.$route.params.id)
     },
     async updateStream () {
       const response = await this.$axios.$get(
         'https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData',
         { progress: false }
       )
-      const stream = response.body.find(stream => stream.id === this.$route.params.id)
+      const stream = response.body.find(stream => stream.slug === this.$route.params.id)
       if (
         (this.stream.title !== stream.title) ||
         (this.stream.description !== stream.description) ||

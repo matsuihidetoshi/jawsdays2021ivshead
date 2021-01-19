@@ -7,7 +7,7 @@
       md="6"
     >
       <v-card
-        :to="'/' + stream.id"
+        :to="'/' + stream.slug"
       >
         <video
           :id="

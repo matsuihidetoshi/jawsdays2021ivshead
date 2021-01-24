@@ -4,35 +4,12 @@
       v-for="(stream, index) in streams"
       :key="index"
       cols="12"
-      :md="layouts[index]"
+      :md="6"
     >
-      <v-card
-        :to="'/' + stream.slug"
-      >
-        <video
-          :id="
-            'video-player-' + index
-          "
-          width="100%"
-          controls
-          playsinline
-          muted
-          :style="'display: ' + hide(stream.active)"
-        />
-
-        <v-card-title>
-          {{ stream.title }}
-          <span
-            v-if="!stream.active"
-          >
-            （準備中）
-          </span>
-        </v-card-title>
-
-        <v-card-text>
-          {{ stream.description }}
-        </v-card-text>
-      </v-card>
+      <item
+        :stream="stream"
+        :index="index"
+      />
     </v-col>
 
     <v-overlay
@@ -49,13 +26,19 @@
 
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
+import Item from '~/components/streams/Item.vue'
 
 @Component({
+  components: {
+    Item
+  },
   data () {
     return {
       streams: [],
       primaryStream: null,
-      layouts: [9, 3, 3, 3, 3, 3, 3, 3],
+      sideStreams: [],
+      bottomStreams: [],
+      layouts: [8, 4, 4, 6, 6, 6],
       loading: true,
       interval: null
     }
@@ -91,7 +74,6 @@ import { Component, Vue } from 'nuxt-property-decorator'
     async fetchStreams () {
       const response = await this.$axios.$get('https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData')
       this.streams = response.body
-      this.primaryStream = this.streams.shift()
     },
     async updateStreams () {
       const streams = await this.$axios.$get(
@@ -109,13 +91,6 @@ import { Component, Vue } from 'nuxt-property-decorator'
           this.streams[index].active = stream.active
         }
       })
-    },
-    hide (active) {
-      if (active) {
-        return 'block'
-      } else {
-        return 'none'
-      }
     }
   }
 })

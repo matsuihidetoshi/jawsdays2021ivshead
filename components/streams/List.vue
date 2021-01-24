@@ -4,7 +4,7 @@
       v-for="(stream, index) in streams"
       :key="index"
       cols="12"
-      md="6"
+      :md="layouts[index]"
     >
       <v-card
         :to="'/' + stream.slug"
@@ -54,6 +54,8 @@ import { Component, Vue } from 'nuxt-property-decorator'
   data () {
     return {
       streams: [],
+      primaryStream: null,
+      layouts: [9, 3, 3, 3, 3, 3, 3, 3],
       loading: true,
       interval: null
     }
@@ -89,6 +91,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
     async fetchStreams () {
       const response = await this.$axios.$get('https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData')
       this.streams = response.body
+      this.primaryStream = this.streams.shift()
     },
     async updateStreams () {
       const streams = await this.$axios.$get(

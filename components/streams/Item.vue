@@ -22,7 +22,9 @@
       </span>
     </v-card-title>
 
-    <v-card-text>
+    <v-card-text
+      :style="index == 1 ? 'height: 10vw' : ''"
+    >
       {{ stream.description }}
     </v-card-text>
   </v-card>

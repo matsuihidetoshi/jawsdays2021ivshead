@@ -4,7 +4,7 @@
       v-for="(stream, index) in streams"
       :key="index"
       cols="12"
-      :md="6"
+      :md="index == 0 ? 12 : 6"
     >
       <item
         :stream="stream"

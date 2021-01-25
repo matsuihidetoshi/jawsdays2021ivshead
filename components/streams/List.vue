@@ -4,35 +4,12 @@
       v-for="(stream, index) in streams"
       :key="index"
       cols="12"
-      md="6"
+      :md="index == 0 ? 12 : 6"
     >
-      <v-card
-        :to="'/' + stream.slug"
-      >
-        <video
-          :id="
-            'video-player-' + index
-          "
-          width="100%"
-          controls
-          playsinline
-          muted
-          :style="'display: ' + hide(stream.active)"
-        />
-
-        <v-card-title>
-          {{ stream.title }}
-          <span
-            v-if="!stream.active"
-          >
-            （準備中）
-          </span>
-        </v-card-title>
-
-        <v-card-text>
-          {{ stream.description }}
-        </v-card-text>
-      </v-card>
+      <item
+        :stream="stream"
+        :index="index"
+      />
     </v-col>
 
     <v-overlay
@@ -49,11 +26,19 @@
 
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
+import Item from '~/components/streams/Item.vue'
 
 @Component({
+  components: {
+    Item
+  },
   data () {
     return {
       streams: [],
+      primaryStream: null,
+      sideStreams: [],
+      bottomStreams: [],
+      layouts: [8, 4, 4, 6, 6, 6],
       loading: true,
       interval: null
     }
@@ -106,13 +91,6 @@ import { Component, Vue } from 'nuxt-property-decorator'
           this.streams[index].active = stream.active
         }
       })
-    },
-    hide (active) {
-      if (active) {
-        return 'block'
-      } else {
-        return 'none'
-      }
     }
   }
 })

@@ -1,14 +1,104 @@
 <template>
   <v-row>
     <v-col
-      v-for="(stream, index) in streams"
+      v-if="primaryStream"
+      cols="12"
+      md="9"
+    >
+      <item
+        :stream="primaryStream"
+        :index="0"
+      />
+    </v-col>
+
+    <v-col
+      cols="12"
+      md="3"
+    >
+      <v-card
+        flat
+      >
+        <a
+          href="https://jawsdays2021.jaws-ug.jp/"
+          target="_blank"
+        >
+          <v-img
+            src="/jaws-days-2021-online.png"
+          />
+        </a>
+
+        <a class="twitter-timeline" data-height="250" href="https://twitter.com/jawsdays?ref_src=twsrc%5Etfw">Tweets by jawsdays</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" />
+
+        <v-list
+          height="10vh"
+          class="overflow-y-auto"
+        >
+          <v-list-item>
+            <a
+              href="https://jaws-ug.jp/"
+              target="_blank"
+            >
+              JAWS-DAYS 2021 re:Connect
+            </a>
+          </v-list-item>
+
+          <v-list-item>
+            <a
+              href="https://note.com/jawsdays2021/"
+              target="_blank"
+            >
+              note
+            </a>
+          </v-list-item>
+
+          <v-list-item>
+            <a
+              href="https://jaws-ug.jp/"
+              target="_blank"
+            >
+              JAWS-UG 公式サイト
+            </a>
+          </v-list-item>
+
+          <v-list-item>
+            <a
+              href="https://www.facebook.com/jawsug/"
+              target="_blank"
+            >
+              <v-icon>mdi-facebook</v-icon>
+              Facebook
+            </a>
+          </v-list-item>
+        </v-list>
+        <!-- <v-card-text>
+
+          <a
+            href="https://note.com/jawsdays2021/"
+            target="_blank"
+            class="ml-5"
+          >
+            note
+          </a>
+
+          <a
+            href="https://www.facebook.com/jawsug/"
+            target="_blank"
+          >
+            <v-icon>mdi-facebook</v-icon>
+          </a>
+        </v-card-text> -->
+      </v-card>
+    </v-col>
+
+    <v-col
+      v-for="(stream, index) in otherStreams"
       :key="index"
       cols="12"
-      :md="6"
+      md="6"
     >
       <item
         :stream="stream"
-        :index="index"
+        :index="index + 1"
       />
     </v-col>
 
@@ -36,8 +126,7 @@ import Item from '~/components/streams/Item.vue'
     return {
       streams: [],
       primaryStream: null,
-      sideStreams: [],
-      bottomStreams: [],
+      otherStreams: [],
       layouts: [8, 4, 4, 6, 6, 6],
       loading: true,
       interval: null
@@ -45,10 +134,11 @@ import Item from '~/components/streams/Item.vue'
   },
   mounted () {
     this.fetchStreams().then(() => {
-      this.streams.forEach((stream, index) => {
-        this.startStream(stream, index)
-        this.loading = false
+      this.startStream(this.primaryStream, 0)
+      this.otherStreams.forEach((stream, index) => {
+        this.startStream(stream, index + 1)
       })
+      this.loading = false
     })
     this.interval = setInterval(() => {
       this.updateStreams()
@@ -74,6 +164,8 @@ import Item from '~/components/streams/Item.vue'
     async fetchStreams () {
       const response = await this.$axios.$get('https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData')
       this.streams = response.body
+      this.otherStreams = Array.from(this.streams)
+      this.primaryStream = this.otherStreams.shift()
     },
     async updateStreams () {
       const streams = await this.$axios.$get(
@@ -89,6 +181,8 @@ import Item from '~/components/streams/Item.vue'
           this.streams[index].title = stream.title
           this.streams[index].description = stream.description
           this.streams[index].active = stream.active
+          this.otherStreams = Array.from(this.streams)
+          this.primaryStream = this.otherStreams.shift()
         }
       })
     }
@@ -97,3 +191,11 @@ import Item from '~/components/streams/Item.vue'
 
 export default class List extends Vue { }
 </script>
+<style scoped>
+a {
+  text-decoration: none;
+}
+.overflow-y-scroll {
+
+}
+</style>

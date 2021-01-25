@@ -13,7 +13,9 @@
       :style="'display: ' + hide(stream.active)"
     />
 
-    <v-card-title>
+    <v-card-title
+      class="text-truncate"
+    >
       {{ stream.title }}
       <span
         v-if="!stream.active"

@@ -27,15 +27,12 @@
           />
         </a>
 
-        <a class="twitter-timeline" data-height="250" href="https://twitter.com/jawsdays?ref_src=twsrc%5Etfw">Tweets by jawsdays</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" />
-
         <v-list
-          height="10vh"
           class="overflow-y-auto"
         >
           <v-list-item>
             <a
-              href="https://jaws-ug.jp/"
+              href="https://twitter.com/jawsdays"
               target="_blank"
             >
               JAWS-DAYS 2021 re:Connect
@@ -65,28 +62,29 @@
               href="https://www.facebook.com/jawsug/"
               target="_blank"
             >
-              <v-icon>mdi-facebook</v-icon>
+              <v-icon
+                class="mb-1"
+              >
+                mdi-facebook
+              </v-icon>
               Facebook
             </a>
           </v-list-item>
+
+          <v-list-item>
+            <a
+              href="https://www.facebook.com/jawsug/"
+              target="_blank"
+            >
+              <v-icon
+                class="mb-1"
+              >
+                mdi-twitter
+              </v-icon>
+              Twitter
+            </a>
+          </v-list-item>
         </v-list>
-        <!-- <v-card-text>
-
-          <a
-            href="https://note.com/jawsdays2021/"
-            target="_blank"
-            class="ml-5"
-          >
-            note
-          </a>
-
-          <a
-            href="https://www.facebook.com/jawsug/"
-            target="_blank"
-          >
-            <v-icon>mdi-facebook</v-icon>
-          </a>
-        </v-card-text> -->
       </v-card>
     </v-col>
 

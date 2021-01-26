@@ -32,7 +32,7 @@
         >
           <v-list-item>
             <a
-              href="https://twitter.com/jawsdays"
+              href="https://jawsdays2021.jaws-ug.jp/"
               target="_blank"
             >
               JAWS-DAYS 2021 re:Connect
@@ -73,7 +73,7 @@
 
           <v-list-item>
             <a
-              href="https://www.facebook.com/jawsug/"
+              href="https://twitter.com/jawsdays/"
               target="_blank"
             >
               <v-icon

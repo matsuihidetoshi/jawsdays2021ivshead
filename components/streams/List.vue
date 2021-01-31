@@ -27,66 +27,26 @@
           />
         </a>
 
-        <a class="twitter-timeline" data-height="250" href="https://twitter.com/jawsdays?ref_src=twsrc%5Etfw">Tweets by jawsdays</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" />
-
         <v-list
-          height="10vh"
           class="overflow-y-auto"
         >
-          <v-list-item>
+          <v-list-item
+            v-for="(link, key) in links"
+            :key="key"
+          >
             <a
-              href="https://jaws-ug.jp/"
+              :href="link.to"
               target="_blank"
             >
-              JAWS-DAYS 2021 re:Connect
-            </a>
-          </v-list-item>
-
-          <v-list-item>
-            <a
-              href="https://note.com/jawsdays2021/"
-              target="_blank"
-            >
-              note
-            </a>
-          </v-list-item>
-
-          <v-list-item>
-            <a
-              href="https://jaws-ug.jp/"
-              target="_blank"
-            >
-              JAWS-UG 公式サイト
-            </a>
-          </v-list-item>
-
-          <v-list-item>
-            <a
-              href="https://www.facebook.com/jawsug/"
-              target="_blank"
-            >
-              <v-icon>mdi-facebook</v-icon>
-              Facebook
+              <v-icon
+                v-if="link.icon"
+                class="mb-1"
+                v-text="link.icon"
+              />
+              {{ link.text }}
             </a>
           </v-list-item>
         </v-list>
-        <!-- <v-card-text>
-
-          <a
-            href="https://note.com/jawsdays2021/"
-            target="_blank"
-            class="ml-5"
-          >
-            note
-          </a>
-
-          <a
-            href="https://www.facebook.com/jawsug/"
-            target="_blank"
-          >
-            <v-icon>mdi-facebook</v-icon>
-          </a>
-        </v-card-text> -->
       </v-card>
     </v-col>
 
@@ -117,6 +77,7 @@
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
 import Item from '~/components/streams/Item.vue'
+import links from '~/data/links.json'
 
 @Component({
   components: {
@@ -124,6 +85,7 @@ import Item from '~/components/streams/Item.vue'
   },
   data () {
     return {
+      links,
       streams: [],
       primaryStream: null,
       otherStreams: [],

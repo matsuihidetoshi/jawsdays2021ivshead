@@ -121,14 +121,10 @@ import links from '~/data/links.json'
         if (typeof player${index} === 'undefined') {
           registerIVSTech(videojs)
           registerIVSQualityPlugin(videojs)
-          /* const player${index} = IVSPlayer.create() */
           const player${index} = videojs('video-player-${index}-${this.timestamp}', {
               techOrder: ["AmazonIVS"]
           })
           player${index}.enableIVSQualityPlugin()
-          /* player${index}.attachHTMLVideoElement(document.getElementById('video-player-${index}')) */
-          /* player${index}.load("${stream.url}") */
-          /* player${index}.play() */
           player${index}.src("${stream.url}")
         }
       `

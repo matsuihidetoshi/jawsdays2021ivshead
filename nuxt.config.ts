@@ -23,10 +23,23 @@ export default {
     ],
     script: [
       {
-        src: 'https://player.live-video.net/1.0.0/amazon-ivs-player.min.js'
+        src: 'https://player.live-video.net/1.0.0/amazon-ivs-player.min.js',
+      },
+      {
+        src: 'https://player.live-video.net/1.2.0/amazon-ivs-quality-plugin.min.js'
+      },
+      {
+        src: 'https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.6/video.min.js'
+      },
+      {
+        src: 'https://player.live-video.net/1.2.0/amazon-ivs-videojs-tech.min.js'
       }
     ],
     link: [
+      {
+        rel: 'stylesheet',
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.6/video-js.css'
+      },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },

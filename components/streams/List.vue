@@ -30,58 +30,20 @@
         <v-list
           class="overflow-y-auto"
         >
-          <v-list-item>
+          <v-list-item
+            v-for="(link, key) in links"
+            :key="key"
+          >
             <a
-              href="https://jawsdays2021.jaws-ug.jp/"
-              target="_blank"
-            >
-              JAWS-DAYS 2021 re:Connect
-            </a>
-          </v-list-item>
-
-          <v-list-item>
-            <a
-              href="https://note.com/jawsdays2021/"
-              target="_blank"
-            >
-              note
-            </a>
-          </v-list-item>
-
-          <v-list-item>
-            <a
-              href="https://jaws-ug.jp/"
-              target="_blank"
-            >
-              JAWS-UG 公式サイト
-            </a>
-          </v-list-item>
-
-          <v-list-item>
-            <a
-              href="https://www.facebook.com/jawsug/"
+              :href="link.to"
               target="_blank"
             >
               <v-icon
+                v-if="link.icon"
                 class="mb-1"
-              >
-                mdi-facebook
-              </v-icon>
-              Facebook
-            </a>
-          </v-list-item>
-
-          <v-list-item>
-            <a
-              href="https://twitter.com/jawsdays/"
-              target="_blank"
-            >
-              <v-icon
-                class="mb-1"
-              >
-                mdi-twitter
-              </v-icon>
-              Twitter
+                v-text="link.icon"
+              />
+              {{ link.text }}
             </a>
           </v-list-item>
         </v-list>
@@ -115,6 +77,7 @@
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
 import Item from '~/components/streams/Item.vue'
+import links from '~/data/links.json'
 
 @Component({
   components: {
@@ -122,6 +85,7 @@ import Item from '~/components/streams/Item.vue'
   },
   data () {
     return {
+      links,
       streams: [],
       primaryStream: null,
       otherStreams: [],

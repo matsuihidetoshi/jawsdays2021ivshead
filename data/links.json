@@ -1,0 +1,27 @@
+[
+  {
+    "to": "https://www.facebook.com/jawsug/",
+    "text": "Facebook",
+    "icon": "mdi-twitter"
+  },
+  {
+    "to": "https://twitter.com/jawsdays/",
+    "text": "Twitter",
+    "icon": "mdi-facebook"
+  },
+  {
+    "to": "https://note.com/jawsdays2021/",
+    "text": "note",
+    "icon": ""
+  },
+  {
+    "to": "https://jawsdays2021.jaws-ug.jp/",
+    "text": "JAWS-DAYS 2021 re:Connect",
+    "icon": ""
+  },
+  {
+    "to": "https://jaws-ug.jp/",
+    "text": "JAWS-UG 公式サイト",
+    "icon": ""
+  }
+]

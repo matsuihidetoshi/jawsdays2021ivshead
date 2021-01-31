@@ -3,7 +3,7 @@
     <v-col
       v-if="primaryStream"
       cols="12"
-      md="9"
+      sm="9"
     >
       <item
         :stream="primaryStream"
@@ -13,7 +13,7 @@
 
     <v-col
       cols="12"
-      md="3"
+      sm="3"
     >
       <v-card
         flat
@@ -35,6 +35,7 @@
             :key="key"
           >
             <a
+              class="text-truncate"
               :href="link.to"
               target="_blank"
             >
@@ -54,7 +55,7 @@
       v-for="(stream, index) in otherStreams"
       :key="index"
       cols="12"
-      md="6"
+      sm="6"
     >
       <item
         :stream="stream"

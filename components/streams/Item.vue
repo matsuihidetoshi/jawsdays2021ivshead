@@ -4,11 +4,13 @@
   >
     <video
       :id="
-        'video-player-' + index
+        'video-player-' + index + '-' + timestamp
       "
+      class="video-js vjs-fluid vjs-big-play-centered"
       width="100%"
       controls
       playsinline
+      autoplay
       muted
       :style="'display: ' + hide(stream.active)"
     />
@@ -39,6 +41,10 @@ import { Component, Vue } from 'nuxt-property-decorator'
       required: true
     },
     index: {
+      type: Number,
+      required: true
+    },
+    timestamp: {
       type: Number,
       required: true
     }

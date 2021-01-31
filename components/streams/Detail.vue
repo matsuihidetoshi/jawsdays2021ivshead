@@ -2,11 +2,13 @@
   <v-card>
     <video
       :id="
-        'video-player-' + stream.id
+        'video-player-' + timestamp
       "
+      class="video-js vjs-fluid vjs-big-play-centered"
       width="100%"
       controls
       playsinline
+      autoplay
       :style="'display: ' + hide(stream.active)"
     />
 
@@ -35,6 +37,11 @@ import { Vue, Component } from 'nuxt-property-decorator'
       required: true
     }
   },
+  data () {
+    return {
+      timestamp: new Date().getTime()
+    }
+  },
   mounted () {
     this.startStream(this.stream)
   },
@@ -43,10 +50,13 @@ import { Vue, Component } from 'nuxt-property-decorator'
       const script = document.createElement('script')
       script.innerHTML = `
         if (typeof player === 'undefined') {
-          const player = IVSPlayer.create()
-          player.attachHTMLVideoElement(document.getElementById('video-player-${stream.id}'))
-          player.load("${stream.url}")
-          player.play()
+          registerIVSTech(videojs)
+          registerIVSQualityPlugin(videojs)
+          const player = videojs('video-player-${this.timestamp}', {
+              techOrder: ["AmazonIVS"]
+          })
+          player.enableIVSQualityPlugin()
+          player.src("${stream.url}")
         }
       `
       document.body.appendChild(script)

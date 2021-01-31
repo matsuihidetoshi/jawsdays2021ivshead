@@ -7,6 +7,7 @@
     >
       <item
         :stream="primaryStream"
+        :timestamp="timestamp"
         :index="0"
       />
     </v-col>
@@ -59,6 +60,7 @@
     >
       <item
         :stream="stream"
+        :timestamp="timestamp"
         :index="index + 1"
       />
     </v-col>
@@ -92,7 +94,8 @@ import links from '~/data/links.json'
       otherStreams: [],
       layouts: [8, 4, 4, 6, 6, 6],
       loading: true,
-      interval: null
+      interval: null,
+      timestamp: new Date().getTime()
     }
   },
   mounted () {
@@ -116,10 +119,17 @@ import links from '~/data/links.json'
       script.setAttribute('id', 'player-script-' + index)
       script.innerHTML = `
         if (typeof player${index} === 'undefined') {
-          const player${index} = IVSPlayer.create()
-          player${index}.attachHTMLVideoElement(document.getElementById('video-player-${index}'))
-          player${index}.load("${stream.url}")
-          player${index}.play()
+          registerIVSTech(videojs)
+          registerIVSQualityPlugin(videojs)
+          /* const player${index} = IVSPlayer.create() */
+          const player${index} = videojs('video-player-${index}-${this.timestamp}', {
+              techOrder: ["AmazonIVS"]
+          })
+          player${index}.enableIVSQualityPlugin()
+          /* player${index}.attachHTMLVideoElement(document.getElementById('video-player-${index}')) */
+          /* player${index}.load("${stream.url}") */
+          /* player${index}.play() */
+          player${index}.src("${stream.url}")
         }
       `
       document.body.appendChild(script)

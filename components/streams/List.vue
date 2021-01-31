@@ -158,7 +158,4 @@ export default class List extends Vue { }
 a {
   text-decoration: none;
 }
-.overflow-y-scroll {
-
-}
 </style>

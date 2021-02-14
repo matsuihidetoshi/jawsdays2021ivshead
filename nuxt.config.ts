@@ -1,5 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 import axios from 'axios'
+import CopyPlugin from 'copy-webpack-plugin'
 
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
@@ -122,7 +123,17 @@ export default {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    plugins: [
+      new CopyPlugin({
+        patterns: [
+          {
+            from: 'node_modules/amazon-ivs-player/dist/assets/amazon-ivs-wasmworker.min.*',
+            to: '[name].[ext]'
+          }
+        ]
+      })
+    ]
   },
 
   generate: {

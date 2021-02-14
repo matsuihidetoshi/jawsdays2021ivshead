@@ -19,7 +19,8 @@
     "amazon-ivs-player": "^1.2.0",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
-    "nuxt-property-decorator": "^2.8.8"
+    "nuxt-property-decorator": "^2.8.8",
+    "video.js": "^7.11.4"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.6",

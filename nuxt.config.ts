@@ -22,20 +22,6 @@ export default {
       { hid: 'og:description', property: 'og:description', content: 'JAWS DAYS 2021 セッション配信サイト' },
       { hid: 'og:image', property: 'og:image', content: (process.env.BASE_URL || 'http://localhost:3000') + '/icon.png' }
     ],
-    script: [
-      {
-        src: 'https://player.live-video.net/1.0.0/amazon-ivs-player.min.js',
-      },
-      {
-        src: 'https://player.live-video.net/1.2.0/amazon-ivs-quality-plugin.min.js'
-      },
-      {
-        src: 'https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.6/video.min.js'
-      },
-      {
-        src: 'https://player.live-video.net/1.2.0/amazon-ivs-videojs-tech.min.js'
-      }
-    ],
     link: [
       {
         rel: 'stylesheet',

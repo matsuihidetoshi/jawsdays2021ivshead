@@ -30,7 +30,7 @@
         font-weight-bold
       "
     >
-      {{ viewer.count[4] }} Viewers
+      {{ viewer.count.slice(-1)[0] }} Viewers
     </v-chip>
 
     <v-card-text>

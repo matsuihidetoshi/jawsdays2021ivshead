@@ -41,6 +41,9 @@
 
 <script>
 import { Vue, Component } from 'nuxt-property-decorator'
+import videojs from 'video.js'
+
+let ivs = null
 
 @Component({
   props: {
@@ -58,6 +61,15 @@ import { Vue, Component } from 'nuxt-property-decorator'
     }
   },
   mounted () {
+    if (ivs === null) {
+      ivs = require('amazon-ivs-player')
+      ivs.registerIVSTech(videojs, {
+        wasmBinary: '/_nuxt/amazon-ivs-wasmworker.min.wasm',
+        wasmWorker: '/_nuxt/amazon-ivs-wasmworker.min.js'
+      })
+      ivs.registerIVSQualityPlugin(videojs)
+    }
+
     this.startStream(this.stream)
     this.getViewers().then(() => {
       this.findViewer()
@@ -73,19 +85,11 @@ import { Vue, Component } from 'nuxt-property-decorator'
   },
   methods: {
     startStream (stream) {
-      const script = document.createElement('script')
-      script.innerHTML = `
-        if (typeof player === 'undefined') {
-          registerIVSTech(videojs)
-          registerIVSQualityPlugin(videojs)
-          const player = videojs('video-player-${this.timestamp}', {
-              techOrder: ["AmazonIVS"]
-          })
-          player.enableIVSQualityPlugin()
-          player.src("${stream.url}")
-        }
-      `
-      document.body.appendChild(script)
+      const player = videojs(`video-player-${this.timestamp}`, {
+        techOrder: ['AmazonIVS']
+      })
+      player.enableIVSQualityPlugin()
+      player.src(stream.url)
     },
     hide (active) {
       if (active) {

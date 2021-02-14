@@ -1,5 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 import axios from 'axios'
+import CopyPlugin from 'copy-webpack-plugin'
 
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
@@ -20,20 +21,6 @@ export default {
       { hid: 'og:title', property: 'og:title', content: 'JAWS DAYS 2021' },
       { hid: 'og:description', property: 'og:description', content: 'JAWS DAYS 2021 セッション配信サイト' },
       { hid: 'og:image', property: 'og:image', content: (process.env.BASE_URL || 'http://localhost:3000') + '/icon.png' }
-    ],
-    script: [
-      {
-        src: 'https://player.live-video.net/1.0.0/amazon-ivs-player.min.js',
-      },
-      {
-        src: 'https://player.live-video.net/1.2.0/amazon-ivs-quality-plugin.min.js'
-      },
-      {
-        src: 'https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.6/video.min.js'
-      },
-      {
-        src: 'https://player.live-video.net/1.2.0/amazon-ivs-videojs-tech.min.js'
-      }
     ],
     link: [
       {
@@ -122,7 +109,17 @@ export default {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    plugins: [
+      new CopyPlugin({
+        patterns: [
+          {
+            from: 'node_modules/amazon-ivs-player/dist/assets/amazon-ivs-wasmworker.min.*',
+            to: '[name].[ext]'
+          }
+        ]
+      })
+    ]
   },
 
   generate: {

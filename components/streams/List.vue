@@ -79,8 +79,11 @@
 
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
+import videojs from 'video.js'
 import Item from '~/components/streams/Item.vue'
 import links from '~/data/links.json'
+
+let ivs = null
 
 @Component({
   components: {
@@ -99,6 +102,15 @@ import links from '~/data/links.json'
     }
   },
   mounted () {
+    if (ivs === null) {
+      ivs = require('amazon-ivs-player')
+      ivs.registerIVSTech(videojs, {
+        wasmBinary: '/_nuxt/amazon-ivs-wasmworker.min.wasm',
+        wasmWorker: '/_nuxt/amazon-ivs-wasmworker.min.js'
+      })
+      ivs.registerIVSQualityPlugin(videojs)
+    }
+
     this.fetchStreams().then(() => {
       this.startStream(this.primaryStream, 0)
       this.otherStreams.forEach((stream, index) => {
@@ -115,20 +127,11 @@ import links from '~/data/links.json'
   },
   methods: {
     startStream (stream, index) {
-      const script = document.createElement('script')
-      script.setAttribute('id', 'player-script-' + index)
-      script.innerHTML = `
-        if (typeof player${index} === 'undefined') {
-          registerIVSTech(videojs)
-          registerIVSQualityPlugin(videojs)
-          const player${index} = videojs('video-player-${index}-${this.timestamp}', {
-              techOrder: ["AmazonIVS"]
-          })
-          player${index}.enableIVSQualityPlugin()
-          player${index}.src("${stream.url}")
-        }
-      `
-      document.body.appendChild(script)
+      const player = videojs(`video-player-${index}-${this.timestamp}`, {
+        techOrder: ['AmazonIVS']
+      })
+      player.enableIVSQualityPlugin()
+      player.src(stream.url)
     },
     async fetchStreams () {
       const response = await this.$axios.$get('https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData')

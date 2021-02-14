@@ -108,7 +108,7 @@ import links from '~/data/links.json'
     })
     this.interval = setInterval(() => {
       this.updateStreams()
-    }, 5000)
+    }, 60000)
   },
   beforeDestroy () {
     clearInterval(this.interval)

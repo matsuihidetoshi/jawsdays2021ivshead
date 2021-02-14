@@ -21,6 +21,18 @@
       </span>
     </v-card-title>
 
+    <v-chip
+      v-if="viewer"
+      color="secondary"
+      class="
+        float-right
+        mr-3
+        font-weight-bold
+      "
+    >
+      {{ viewer.count[4] }} Viewers
+    </v-chip>
+
     <v-card-text>
       {{ stream.description }}
     </v-card-text>
@@ -39,11 +51,25 @@ import { Vue, Component } from 'nuxt-property-decorator'
   },
   data () {
     return {
-      timestamp: new Date().getTime()
+      timestamp: new Date().getTime(),
+      viewers: [],
+      viewer: null,
+      interval: null
     }
   },
   mounted () {
     this.startStream(this.stream)
+    this.getViewers().then(() => {
+      this.findViewer()
+    })
+    this.interval = setInterval(() => {
+      this.getViewers().then(() => {
+        this.findViewer()
+      })
+    }, 60000)
+  },
+  beforeDestroy () {
+    clearInterval(this.interval)
   },
   methods: {
     startStream (stream) {
@@ -66,6 +92,33 @@ import { Vue, Component } from 'nuxt-property-decorator'
         return 'block'
       } else {
         return 'none'
+      }
+    },
+    async getViewers () {
+      const response = await this.$axios.$get('https://fthtzlhqci.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getIVSViewerCount')
+      const viewerDataArray = response.body
+      this.viewers = viewerDataArray.map((viewerData) => {
+        if (viewerData.length > 0) {
+          return {
+            key: viewerData[0].channel.split('/')[1],
+            count: viewerData.sort((a, b) => {
+              return a.time - b.time
+            }).map((data) => {
+              return data.count
+            })
+          }
+        } else {
+          return null
+        }
+      })
+    },
+    findViewer () {
+      if (this.viewers.length === 0) {
+        this.viewer = null
+      } else {
+        this.viewer = this.viewers.find((viewer) => {
+          return viewer ? this.stream.url.split('.')[7] === viewer.key : null
+        })
       }
     }
   }

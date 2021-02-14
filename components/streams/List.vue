@@ -65,16 +65,6 @@
       />
     </v-col>
 
-    <v-col
-      cols="12"
-    >
-      <v-card>
-        <v-card-text>
-          {{ viewers }}
-        </v-card-text>
-      </v-card>
-    </v-col>
-
     <v-overlay
       :value="loading"
     >
@@ -105,8 +95,7 @@ import links from '~/data/links.json'
       layouts: [8, 4, 4, 6, 6, 6],
       loading: true,
       interval: null,
-      timestamp: new Date().getTime(),
-      viewers: []
+      timestamp: new Date().getTime()
     }
   },
   mounted () {
@@ -115,12 +104,11 @@ import links from '~/data/links.json'
       this.otherStreams.forEach((stream, index) => {
         this.startStream(stream, index + 1)
       })
-      this.getViewers()
       this.loading = false
     })
     this.interval = setInterval(() => {
       this.updateStreams()
-    }, 5000)
+    }, 60000)
   },
   beforeDestroy () {
     clearInterval(this.interval)
@@ -166,10 +154,6 @@ import links from '~/data/links.json'
           this.primaryStream = this.otherStreams.shift()
         }
       })
-    },
-    async getViewers () {
-      const response = await this.$axios.$get('https://fthtzlhqci.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getIVSViewerCount')
-      this.viewers = response.body
     }
   }
 })

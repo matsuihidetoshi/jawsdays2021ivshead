@@ -23,7 +23,7 @@ import StreamDetail from '~/components/streams/Detail.vue'
     this.getStreamById().then(() => {
       this.interval = setInterval(() => {
         this.updateStream()
-      }, 5000)
+      }, 60000)
     })
   },
   beforeDestroy () {

@@ -38,7 +38,9 @@
       {{ viewer.count.slice(-1)[0] }} Viewers
     </v-chip>
 
-    <v-card-text>
+    <v-card-text
+      style="white-space:pre-wrap"
+    >
       {{ stream.description }}
     </v-card-text>
   </v-card>

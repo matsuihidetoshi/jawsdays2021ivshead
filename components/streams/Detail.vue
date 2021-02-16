@@ -34,7 +34,7 @@
     </v-chip>
 
     <v-card-text
-      style="white-space:pre-wrap"
+      style="white-space:pre-line"
     >
       {{ stream.description }}
     </v-card-text>

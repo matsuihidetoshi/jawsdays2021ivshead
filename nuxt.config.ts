@@ -31,6 +31,13 @@ export default {
     ]
   },
 
+  pwa: {
+    manifest: {
+      name: 'JAWS DAYS 2021',
+      short_name: 'JAWS DAYS 2021'
+    }
+  },
+
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
   ],

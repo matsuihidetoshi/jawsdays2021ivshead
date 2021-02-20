@@ -20,7 +20,7 @@ export default {
       { hid: 'og:url', property: 'og:url', content: process.env.BASE_URL || 'http://localhost:3000' },
       { hid: 'og:title', property: 'og:title', content: 'JAWS DAYS 2021' },
       { hid: 'og:description', property: 'og:description', content: 'JAWS DAYS 2021 セッション配信サイト' },
-      { hid: 'og:image', property: 'og:image', content: (process.env.BASE_URL || 'http://localhost:3000') + '/icon.png' }
+      { hid: 'og:image', property: 'og:image', content: (process.env.BASE_URL || 'http://localhost:3000') + '/jaws-days-2021-online.png' }
     ],
     link: [
       {

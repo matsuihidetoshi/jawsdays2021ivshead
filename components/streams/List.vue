@@ -126,12 +126,12 @@ let ivs = null
     clearInterval(this.interval)
   },
   methods: {
-    startStream (stream, index) {
+    startStream (_, index) {
       const player = videojs(`video-player-${index}-${this.timestamp}`, {
         techOrder: ['AmazonIVS']
       })
       player.enableIVSQualityPlugin()
-      player.src(stream.url)
+      player.src('https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.xhP3ExfcX8ON.m3u8')
     },
     async fetchStreams () {
       const response = await this.$axios.$get('https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData')

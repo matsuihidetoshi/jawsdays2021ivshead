@@ -91,6 +91,10 @@ let ivs = null
         techOrder: ['AmazonIVS']
       })
       player.enableIVSQualityPlugin()
+      const playerEvent = player.getIVSEvents().PlayerEventType
+      player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, () => {
+        console.log('hello')
+      })
       player.src(stream.url)
     },
     hide (active) {

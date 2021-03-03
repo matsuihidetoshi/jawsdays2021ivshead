@@ -153,10 +153,13 @@ let ivs = null
       })
       player.enableIVSQualityPlugin()
       const playerEvent = player.getIVSEvents().PlayerEventType
-      player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, () => {
-        this.message = '↓下から投票してください！↓'
-        this.snackbar = true
-        this.question = true
+      player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, (cue) => {
+        const event = cue.text.split(':')[0]
+        if (event === 'Q') {
+          this.message = '↓下から投票してください！↓'
+          this.snackbar = true
+          this.question = true
+        }
       })
       player.src(stream.url)
     },

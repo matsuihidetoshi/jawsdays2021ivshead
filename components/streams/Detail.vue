@@ -12,6 +12,20 @@
       :style="'display: ' + hide(stream.active)"
     />
 
+    <v-card-title
+      v-if="question"
+      class="font-weight-bold"
+    >
+      投票！
+    </v-card-title>
+
+    <question
+      v-if="question"
+      :options="options"
+      :action="postAnswer"
+      @finish-post="finishPost()"
+    />
+
     <v-card-title>
       {{ stream.title }}
       <span
@@ -39,18 +53,11 @@
       {{ stream.description }}
     </v-card-text>
 
-    <v-card-title
-      v-if="question"
-      class="font-weight-bold"
-    >
-      投票！
-    </v-card-title>
-
-    <question
-      v-if="question"
-      :options="options"
-      :action="postAnswer"
-      @finish-post="finishPost()"
+    <result
+      :result="chartData"
+      :options="chartOptions"
+      :display="resultDisplay"
+      @back="resultDisplay = false"
     />
 
     <v-snackbar
@@ -90,12 +97,14 @@
 import { Vue, Component } from 'nuxt-property-decorator'
 import videojs from 'video.js'
 import Question from '~/components/streams/Question.vue'
+import Result from '~/components/streams/Result.vue'
 
 let ivs = null
 
 @Component({
   components: {
-    Question
+    Question,
+    Result
   },
   props: {
     stream: {
@@ -110,7 +119,23 @@ let ivs = null
       viewer: null,
       interval: null,
       question: false,
-      result: false,
+      resultDisplay: false,
+      chartDataValues: [
+        4, 2, 2, 1
+      ],
+      chartColors: [
+        '#FF4081',
+        '#448AFF',
+        '#FFAB40',
+        '#43A047'
+      ],
+      chartLabels: ['1', '2', '3', '4'],
+      chartOptions: {
+        animation: {
+          duration: 1500,
+          easing: 'easeInOutCubic'
+        }
+      },
       options: [
         { text: '1', color: '#FF4081' },
         { text: '2', color: '#448AFF' },
@@ -121,6 +146,19 @@ let ivs = null
       snackbar: false,
       loading: false,
       value: null
+    }
+  },
+  computed: {
+    chartData () {
+      return {
+        datasets: [
+          {
+            data: this.chartDataValues,
+            backgroundColor: this.chartColors
+          }
+        ],
+        labels: this.chartLabels
+      }
     }
   },
   mounted () {
@@ -159,6 +197,8 @@ let ivs = null
           this.message = '↓下から投票してください！↓'
           this.snackbar = true
           this.question = true
+        } else if (event === 'R') {
+          this.resultDisplay = true
         }
       })
       player.src(stream.url)

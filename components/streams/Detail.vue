@@ -225,6 +225,8 @@ const docClient = new AWS.DynamoDB.DocumentClient()
             })
             this.resultDisplay = true
           })
+        } else if (event === 'F') {
+          this.resultDisplay = false
         }
       })
       player.src(stream.url)

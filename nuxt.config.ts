@@ -96,7 +96,10 @@ export default {
   },
 
   env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    awsRegion: process.env.JAWS_DAYS_2021_AWS_REGION || '',
+    surveysTableName: process.env.JAWS_DAYS_2021_SURVEYS_TABLENAME || '',
+    awsIdPoolId: process.env.JAWS_DAYS_2021_AWS_IDPOOL_ID || ''
   },
 
   pwa: {

@@ -95,11 +95,23 @@
 
 <script>
 import { Vue, Component } from 'nuxt-property-decorator'
+import AWS from 'aws-sdk'
 import videojs from 'video.js'
 import Question from '~/components/streams/Question.vue'
 import Result from '~/components/streams/Result.vue'
 
 let ivs = null
+
+const TABLENAME = process.env.surveysTableName
+
+AWS.config.update({
+  region: process.env.awsRegion,
+  credentials: new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: process.env.awsIdPoolId
+  })
+})
+
+const docClient = new AWS.DynamoDB.DocumentClient()
 
 @Component({
   components: {
@@ -120,9 +132,7 @@ let ivs = null
       interval: null,
       question: false,
       resultDisplay: false,
-      chartDataValues: [
-        4, 2, 2, 1
-      ],
+      chartDataValues: [],
       chartColors: [
         '#FF4081',
         '#448AFF',
@@ -145,7 +155,9 @@ let ivs = null
       message: '',
       snackbar: false,
       loading: false,
-      value: null
+      value: null,
+      questionId: null,
+      questionData: null
     }
   },
   computed: {
@@ -193,12 +205,26 @@ let ivs = null
       const playerEvent = player.getIVSEvents().PlayerEventType
       player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, (cue) => {
         const event = cue.text.split(':')[0]
+        this.questionId = cue.text.split(':')[1]
         if (event === 'Q') {
           this.message = '↓下から投票してください！↓'
           this.snackbar = true
           this.question = true
         } else if (event === 'R') {
-          this.resultDisplay = true
+          this.loading = true
+          this.query(this.questionId).then(() => {
+            this.loading = false
+            const numbers = [0, 1, 2, 3]
+            this.chartDataValues = numbers.map((number) => {
+              const result = this.questionData.find((data) => { return data.answer === number })
+              if (result) {
+                return result.count
+              } else {
+                return 0
+              }
+            })
+            this.resultDisplay = true
+          })
         }
       })
       player.src(stream.url)
@@ -237,15 +263,73 @@ let ivs = null
         })
       }
     },
-    async postAnswer (number) {
+    postAnswer (number) {
       this.loading = true
-      await console.log('Post: ' + number)
-      this.loading = false
+      const params = {
+        TableName: TABLENAME,
+        Key: {
+          id: this.questionId,
+          answer: number
+        },
+        UpdateExpression: 'ADD #count :one',
+        ExpressionAttributeNames: {
+          '#count': 'count'
+        },
+        ExpressionAttributeValues: {
+          ':one': 1
+        }
+      }
+
+      return new Promise((resolve, reject) => {
+        docClient.update(params, (err, data) => {
+          if (err) {
+            reject(err)
+          } else {
+            const counts = [0, 0, 0, 0]
+            if (data.Items) {
+              data.Items.forEach((item) => {
+                counts[item.answer - 1] = item.count
+              })
+            }
+            resolve(counts)
+          }
+        })
+      })
     },
     finishPost () {
+      this.loading = false
       this.question = false
       this.message = '投票しました！'
       this.snackbar = true
+    },
+    query (surveyId) {
+      const params = {
+        TableName: TABLENAME,
+        KeyConditionExpression: '#id = :id',
+        ExpressionAttributeNames: {
+          '#id': 'id'
+        },
+        ExpressionAttributeValues: {
+          ':id': surveyId
+        }
+      }
+
+      return new Promise((resolve, reject) => {
+        docClient.query(params, (err, data) => {
+          if (err) {
+            reject(err)
+          } else {
+            const counts = [0, 0, 0, 0]
+            if (data.Items) {
+              data.Items.forEach((item) => {
+                counts[item.answer - 1] = item.count
+              })
+            }
+            this.questionData = data.Items
+            resolve(counts)
+          }
+        })
+      })
     }
   }
 })

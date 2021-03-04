@@ -42,9 +42,10 @@ export default {
   },
   methods: {
     afterPost () {
-      this.action(this.value)
-      this.dialog = false
-      this.$emit('finish-post')
+      this.action(this.value).then(() => {
+        this.dialog = false
+        this.$emit('finish-post')
+      })
     },
     back () {
       this.dialog = false

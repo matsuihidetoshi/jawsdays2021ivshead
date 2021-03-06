@@ -187,6 +187,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
     this.getViewers().then(() => {
       this.findViewer()
     })
+
     this.interval = setInterval(() => {
       this.getViewers().then(() => {
         this.findViewer()
@@ -229,6 +230,10 @@ const docClient = new AWS.DynamoDB.DocumentClient()
         } else if (event === 'F') {
           this.question = false
           this.resultDisplay = false
+        } else if (event === 'V') {
+          console.log(cue.text)
+        } else if (event === 'D') {
+          console.log(cue.text)
         }
       })
       player.src(stream.url)

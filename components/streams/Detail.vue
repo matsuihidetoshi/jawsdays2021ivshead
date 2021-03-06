@@ -211,6 +211,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
           this.snackbar = true
           this.question = true
         } else if (event === 'R') {
+          this.question = false
           this.loading = true
           this.query(this.questionId).then(() => {
             this.loading = false
@@ -226,6 +227,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
             this.resultDisplay = true
           })
         } else if (event === 'F') {
+          this.question = false
           this.resultDisplay = false
         }
       })

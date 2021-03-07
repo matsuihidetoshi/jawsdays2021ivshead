@@ -18,7 +18,7 @@
     <v-card-title
       class="text-truncate"
     >
-      {{ stream.title }}
+      {{ title }}
       <span
         v-if="!stream.active"
       >
@@ -41,12 +41,15 @@
     <v-card-text
       style="white-space:pre-line"
     >
-      {{ stream.description }}
+      {{ description }}
     </v-card-text>
   </v-card>
 </template>
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
+import videojs from 'video.js'
+
+let ivs = null
 
 @Component({
   props: {
@@ -67,23 +70,86 @@ import { Component, Vue } from 'nuxt-property-decorator'
     return {
       viewers: [],
       viewer: null,
-      interval: null
+      interval: null,
+      title: this.stream.title || '',
+      description: this.stream.description || '',
+      descriptionBuffer: '',
+      updateKey: ''
+    }
+  },
+  computed: {
+    computedStream () {
+      return this.stream
+    }
+  },
+  watch: {
+    computedStream () {
+      this.title = this.computedStream.title
+      this.description = this.computedStream.description
     }
   },
   mounted () {
+    if (ivs === null) {
+      ivs = require('amazon-ivs-player')
+      ivs.registerIVSTech(videojs, {
+        wasmBinary: '/_nuxt/amazon-ivs-wasmworker.min.wasm',
+        wasmWorker: '/_nuxt/amazon-ivs-wasmworker.min.js'
+      })
+      ivs.registerIVSQualityPlugin(videojs)
+    }
+    this.startStream(this.stream, this.index)
     this.getViewers().then(() => {
       this.findViewer()
     })
-    this.interval = setInterval(() => {
-      this.getViewers().then(() => {
-        this.findViewer()
-      })
-    }, 60000)
+    if (navigator.userAgent.indexOf('iPhone') > 0) {
+      this.interval = setInterval(() => {
+        this.getViewers().then(() => {
+          this.findViewer()
+        })
+      }, 60000)
+    }
   },
   beforeDestroy () {
     clearInterval(this.interval)
   },
   methods: {
+    startStream (stream, index) {
+      const player = videojs(`video-player-${index}-${this.timestamp}`, {
+        techOrder: ['AmazonIVS']
+      })
+      player.enableIVSQualityPlugin()
+      const playerEvent = player.getIVSEvents().PlayerEventType
+      player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, (cue) => {
+        const event = cue.text.split(':')[0]
+        if (event === 'V') {
+          const viewers = JSON.parse(cue.text.split('::')[1])
+          this.viewer = {
+            key: viewers[0].channel.split('/')[1],
+            count: [
+              viewers[4].count,
+              viewers[3].count,
+              viewers[2].count,
+              viewers[1].count,
+              viewers[0].count
+            ]
+          }
+        } else if (event === 'D') {
+          if (cue.text.split('::')[4] && cue.text.split('::')[4] === 'START') {
+            this.updateKey = cue.text.split('::')[2]
+            this.descriptionBuffer = cue.text.split('::')[3]
+          } else if (!cue.text.split('::')[4] && cue.text.split('::')[2] === this.updateKey) {
+            this.descriptionBuffer += cue.text.split('::')[3]
+          } else if (cue.text.split('::')[4] && cue.text.split('::')[4] === 'END') {
+            this.description = this.descriptionBuffer + cue.text.split('::')[3]
+            this.descriptionBuffer = ''
+          }
+        } else if (event === 'T') {
+          this.title = cue.text.split('::')[1]
+        }
+      })
+      player.src(stream.url)
+      this.$emit('finish')
+    },
     hide (active) {
       if (active) {
         return 'block'

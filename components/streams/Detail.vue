@@ -27,7 +27,7 @@
     />
 
     <v-card-title>
-      {{ stream.title }}
+      {{ title }}
       <span
         v-if="!stream.active"
       >
@@ -50,7 +50,7 @@
     <v-card-text
       style="white-space:pre-line"
     >
-      {{ stream.description }}
+      {{ description }}
     </v-card-text>
 
     <result
@@ -157,7 +157,11 @@ const docClient = new AWS.DynamoDB.DocumentClient()
       loading: false,
       value: null,
       questionId: null,
-      questionData: null
+      questionData: null,
+      title: this.stream.title || '',
+      description: this.stream.description || '',
+      descriptionBuffer: '',
+      updateKey: ''
     }
   },
   computed: {
@@ -171,6 +175,15 @@ const docClient = new AWS.DynamoDB.DocumentClient()
         ],
         labels: this.chartLabels
       }
+    },
+    computedStream () {
+      return this.stream
+    }
+  },
+  watch: {
+    computedStream () {
+      this.title = this.computedStream.title
+      this.description = this.computedStream.description
     }
   },
   mounted () {
@@ -187,11 +200,14 @@ const docClient = new AWS.DynamoDB.DocumentClient()
     this.getViewers().then(() => {
       this.findViewer()
     })
-    this.interval = setInterval(() => {
-      this.getViewers().then(() => {
-        this.findViewer()
-      })
-    }, 60000)
+
+    if (navigator.userAgent.indexOf('iPhone') > 0) {
+      this.interval = setInterval(() => {
+        this.getViewers().then(() => {
+          this.findViewer()
+        })
+      }, 60000)
+    }
   },
   beforeDestroy () {
     clearInterval(this.interval)
@@ -211,6 +227,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
           this.snackbar = true
           this.question = true
         } else if (event === 'R') {
+          this.questionId = cue.text.split(':')[1]
           this.question = false
           this.loading = true
           this.questionId = cue.text.split(':')[1]
@@ -230,6 +247,30 @@ const docClient = new AWS.DynamoDB.DocumentClient()
         } else if (event === 'F') {
           this.question = false
           this.resultDisplay = false
+        } else if (event === 'V') {
+          const viewers = JSON.parse(cue.text.split('::')[1])
+          this.viewer = {
+            key: viewers[0].channel.split('/')[1],
+            count: [
+              viewers[4].count,
+              viewers[3].count,
+              viewers[2].count,
+              viewers[1].count,
+              viewers[0].count
+            ]
+          }
+        } else if (event === 'D') {
+          if (cue.text.split('::')[4] && cue.text.split('::')[4] === 'START') {
+            this.updateKey = cue.text.split('::')[2]
+            this.descriptionBuffer = cue.text.split('::')[3]
+          } else if (!cue.text.split('::')[4] && cue.text.split('::')[2] === this.updateKey) {
+            this.descriptionBuffer += cue.text.split('::')[3]
+          } else if (cue.text.split('::')[4] && cue.text.split('::')[4] === 'END') {
+            this.description = this.descriptionBuffer + cue.text.split('::')[3]
+            this.descriptionBuffer = ''
+          }
+        } else if (event === 'T') {
+          this.title = cue.text.split('::')[1]
         }
       })
       player.src(stream.url)

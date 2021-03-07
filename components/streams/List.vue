@@ -62,6 +62,7 @@
         :stream="stream"
         :timestamp="timestamp"
         :index="index + 1"
+        @finish="loading = false"
       />
     </v-col>
 
@@ -79,11 +80,8 @@
 
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
-import videojs from 'video.js'
 import Item from '~/components/streams/Item.vue'
 import links from '~/data/links.json'
-
-let ivs = null
 
 @Component({
   components: {
@@ -102,37 +100,17 @@ let ivs = null
     }
   },
   mounted () {
-    if (ivs === null) {
-      ivs = require('amazon-ivs-player')
-      ivs.registerIVSTech(videojs, {
-        wasmBinary: '/_nuxt/amazon-ivs-wasmworker.min.wasm',
-        wasmWorker: '/_nuxt/amazon-ivs-wasmworker.min.js'
-      })
-      ivs.registerIVSQualityPlugin(videojs)
+    this.fetchStreams()
+    if (navigator.userAgent.indexOf('iPhone') > 0) {
+      this.interval = setInterval(() => {
+        this.updateStreams()
+      }, 60000)
     }
-
-    this.fetchStreams().then(() => {
-      this.startStream(this.primaryStream, 0)
-      this.otherStreams.forEach((stream, index) => {
-        this.startStream(stream, index + 1)
-      })
-      this.loading = false
-    })
-    this.interval = setInterval(() => {
-      this.updateStreams()
-    }, 60000)
   },
   beforeDestroy () {
     clearInterval(this.interval)
   },
   methods: {
-    startStream (stream, index) {
-      const player = videojs(`video-player-${index}-${this.timestamp}`, {
-        techOrder: ['AmazonIVS']
-      })
-      player.enableIVSQualityPlugin()
-      player.src(stream.url)
-    },
     async fetchStreams () {
       const response = await this.$axios.$get('https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData')
       this.streams = response.body
@@ -140,23 +118,13 @@ let ivs = null
       this.primaryStream = this.otherStreams.shift()
     },
     async updateStreams () {
-      const streams = await this.$axios.$get(
+      const response = await this.$axios.$get(
         'https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData',
         { progress: false }
       )
-      streams.body.forEach((stream, index) => {
-        if (
-          (this.streams[index].title !== stream.title) ||
-          (this.streams[index].description !== stream.description) ||
-          (this.streams[index].active !== stream.active)
-        ) {
-          this.streams[index].title = stream.title
-          this.streams[index].description = stream.description
-          this.streams[index].active = stream.active
-          this.otherStreams = Array.from(this.streams)
-          this.primaryStream = this.otherStreams.shift()
-        }
-      })
+      this.streams = response.body
+      this.otherStreams = Array.from(this.streams)
+      this.primaryStream = this.otherStreams.shift()
     }
   }
 })

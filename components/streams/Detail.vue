@@ -190,11 +190,13 @@ const docClient = new AWS.DynamoDB.DocumentClient()
       this.findViewer()
     })
 
-    this.interval = setInterval(() => {
-      this.getViewers().then(() => {
-        this.findViewer()
-      })
-    }, 60000)
+    if (window.navigator.userAgent.includes('iPhone')) {
+      this.interval = setInterval(() => {
+        this.getViewers().then(() => {
+          this.findViewer()
+        })
+      }, 60000)
+    }
   },
   beforeDestroy () {
     clearInterval(this.interval)
@@ -245,8 +247,6 @@ const docClient = new AWS.DynamoDB.DocumentClient()
               viewers[0].count
             ]
           }
-          console.log('*************metadata viewer****************')
-          console.log(this.viewer)
         } else if (event === 'D') {
           console.log(cue.text)
         } else if (event === 'T') {

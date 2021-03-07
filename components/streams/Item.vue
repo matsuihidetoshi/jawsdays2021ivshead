@@ -77,6 +77,17 @@ let ivs = null
       updateKey: ''
     }
   },
+  computed: {
+    computedStream () {
+      return this.stream
+    }
+  },
+  watch: {
+    computedStream () {
+      this.title = this.computedStream.title
+      this.description = this.computedStream.description
+    }
+  },
   mounted () {
     if (ivs === null) {
       ivs = require('amazon-ivs-player')

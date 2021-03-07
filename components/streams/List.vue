@@ -118,13 +118,13 @@ import links from '~/data/links.json'
       this.primaryStream = this.otherStreams.shift()
     },
     async updateStreams () {
-      const streams = await this.$axios.$get(
+      const response = await this.$axios.$get(
         'https://xus4jptq21.execute-api.ap-northeast-1.amazonaws.com/default/jawsdays2021getStreamData',
         { progress: false }
       )
-      streams.body.forEach((stream, index) => {
-        this.streams[index] = stream
-      })
+      this.streams = response.body
+      this.otherStreams = Array.from(this.streams)
+      this.primaryStream = this.otherStreams.shift()
     }
   }
 })

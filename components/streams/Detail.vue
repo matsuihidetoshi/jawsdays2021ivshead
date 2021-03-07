@@ -298,7 +298,6 @@ const docClient = new AWS.DynamoDB.DocumentClient()
         this.viewer = this.viewers.find((viewer) => {
           return viewer ? this.stream.url.split('.')[7] === viewer.key : null
         })
-        console.log(this.viewer)
       }
     },
     postAnswer (number) {

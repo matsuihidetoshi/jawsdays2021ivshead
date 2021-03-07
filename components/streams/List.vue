@@ -101,9 +101,11 @@ import links from '~/data/links.json'
   },
   mounted () {
     this.fetchStreams()
-    this.interval = setInterval(() => {
-      this.updateStreams()
-    }, 60000)
+    if (window.navigator.userAgent.includes('iPhone')) {
+      this.interval = setInterval(() => {
+        this.updateStreams()
+      }, 60000)
+    }
   },
   beforeDestroy () {
     clearInterval(this.interval)

@@ -18,7 +18,7 @@
     <v-card-title
       class="text-truncate"
     >
-      {{ stream.title }}
+      {{ title }}
       <span
         v-if="!stream.active"
       >
@@ -41,7 +41,7 @@
     <v-card-text
       style="white-space:pre-line"
     >
-      {{ stream.description }}
+      {{ description }}
     </v-card-text>
   </v-card>
 </template>
@@ -90,11 +90,13 @@ let ivs = null
     this.getViewers().then(() => {
       this.findViewer()
     })
-    this.interval = setInterval(() => {
-      this.getViewers().then(() => {
-        this.findViewer()
-      })
-    }, 60000)
+    if (window.navigator.userAgent.includes('iPhone')) {
+      this.interval = setInterval(() => {
+        this.getViewers().then(() => {
+          this.findViewer()
+        })
+      }, 60000)
+    }
   },
   beforeDestroy () {
     clearInterval(this.interval)
@@ -120,8 +122,19 @@ let ivs = null
               viewers[0].count
             ]
           }
+        } else if (event === 'D') {
+          if (cue.text.split('::')[4] && cue.text.split('::')[4] === 'START') {
+            this.updateKey = cue.text.split('::')[2]
+            this.descriptionBuffer = cue.text.split('::')[3]
+          } else if (!cue.text.split('::')[4] && cue.text.split('::')[2] === this.updateKey) {
+            this.descriptionBuffer += cue.text.split('::')[3]
+          } else if (cue.text.split('::')[4] && cue.text.split('::')[4] === 'END') {
+            this.description = this.descriptionBuffer + cue.text.split('::')[3]
+            this.descriptionBuffer = ''
+          }
+        } else if (event === 'T') {
+          this.title = cue.text.split('::')[1]
         }
-        console.log(this.viewer)
       })
       player.src(stream.url)
       this.$emit('finish')

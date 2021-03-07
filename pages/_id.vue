@@ -21,9 +21,11 @@ import StreamDetail from '~/components/streams/Detail.vue'
   },
   mounted () {
     this.getStreamById().then(() => {
-      this.interval = setInterval(() => {
-        this.updateStream()
-      }, 60000)
+      if (navigator.userAgent.indexOf('iPhone') > 0) {
+        this.interval = setInterval(() => {
+          this.updateStream()
+        }, 60000)
+      }
     })
   },
   beforeDestroy () {
@@ -40,15 +42,7 @@ import StreamDetail from '~/components/streams/Detail.vue'
         { progress: false }
       )
       const stream = response.body.find(stream => stream.slug === this.$route.params.id)
-      if (
-        (this.stream.title !== stream.title) ||
-        (this.stream.description !== stream.description) ||
-        (this.stream.active !== stream.active)
-      ) {
-        this.stream.title = stream.title
-        this.stream.description = stream.description
-        this.stream.active = stream.active
-      }
+      this.stream = stream
     }
   }
 })

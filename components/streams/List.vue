@@ -123,17 +123,7 @@ import links from '~/data/links.json'
         { progress: false }
       )
       streams.body.forEach((stream, index) => {
-        if (
-          (this.streams[index].title !== stream.title) ||
-          (this.streams[index].description !== stream.description) ||
-          (this.streams[index].active !== stream.active)
-        ) {
-          this.streams[index].title = stream.title
-          this.streams[index].description = stream.description
-          this.streams[index].active = stream.active
-          this.otherStreams = Array.from(this.streams)
-          this.primaryStream = this.otherStreams.shift()
-        }
+        this.streams[index] = stream
       })
     }
   }

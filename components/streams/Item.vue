@@ -47,6 +47,9 @@
 </template>
 <script>
 import { Component, Vue } from 'nuxt-property-decorator'
+import videojs from 'video.js'
+
+let ivs = null
 
 @Component({
   props: {
@@ -67,10 +70,23 @@ import { Component, Vue } from 'nuxt-property-decorator'
     return {
       viewers: [],
       viewer: null,
-      interval: null
+      interval: null,
+      title: this.stream.title || '',
+      description: this.stream.description || '',
+      descriptionBuffer: '',
+      updateKey: ''
     }
   },
   mounted () {
+    if (ivs === null) {
+      ivs = require('amazon-ivs-player')
+      ivs.registerIVSTech(videojs, {
+        wasmBinary: '/_nuxt/amazon-ivs-wasmworker.min.wasm',
+        wasmWorker: '/_nuxt/amazon-ivs-wasmworker.min.js'
+      })
+      ivs.registerIVSQualityPlugin(videojs)
+    }
+    this.startStream(this.stream, this.index)
     this.getViewers().then(() => {
       this.findViewer()
     })
@@ -84,6 +100,32 @@ import { Component, Vue } from 'nuxt-property-decorator'
     clearInterval(this.interval)
   },
   methods: {
+    startStream (stream, index) {
+      const player = videojs(`video-player-${index}-${this.timestamp}`, {
+        techOrder: ['AmazonIVS']
+      })
+      player.enableIVSQualityPlugin()
+      const playerEvent = player.getIVSEvents().PlayerEventType
+      player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, (cue) => {
+        const event = cue.text.split(':')[0]
+        if (event === 'V') {
+          const viewers = JSON.parse(cue.text.split('::')[1])
+          this.viewer = {
+            key: viewers[0].channel.split('/')[1],
+            count: [
+              viewers[4].count,
+              viewers[3].count,
+              viewers[2].count,
+              viewers[1].count,
+              viewers[0].count
+            ]
+          }
+        }
+        console.log(this.viewer)
+      })
+      player.src(stream.url)
+      this.$emit('finish')
+    },
     hide (active) {
       if (active) {
         return 'block'

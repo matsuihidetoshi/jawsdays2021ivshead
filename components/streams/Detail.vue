@@ -27,7 +27,7 @@
     />
 
     <v-card-title>
-      {{ stream.title }}
+      {{ title }}
       <span
         v-if="!stream.active"
       >
@@ -50,7 +50,7 @@
     <v-card-text
       style="white-space:pre-line"
     >
-      {{ stream.description }}
+      {{ description }}
     </v-card-text>
 
     <result
@@ -157,7 +157,9 @@ const docClient = new AWS.DynamoDB.DocumentClient()
       loading: false,
       value: null,
       questionId: null,
-      questionData: null
+      questionData: null,
+      title: this.stream.title || '',
+      description: this.stream.description || ''
     }
   },
   computed: {
@@ -232,9 +234,23 @@ const docClient = new AWS.DynamoDB.DocumentClient()
           this.question = false
           this.resultDisplay = false
         } else if (event === 'V') {
-          console.log(cue.text)
+          const viewers = JSON.parse(cue.text.split('::')[1])
+          this.viewer = {
+            key: viewers[0].channel.split('/')[1],
+            count: [
+              viewers[4].count,
+              viewers[3].count,
+              viewers[2].count,
+              viewers[1].count,
+              viewers[0].count
+            ]
+          }
+          console.log('*************metadata viewer****************')
+          console.log(this.viewer)
         } else if (event === 'D') {
           console.log(cue.text)
+        } else if (event === 'T') {
+          this.title = cue.text.split('::')[1]
         }
       })
       player.src(stream.url)
@@ -271,6 +287,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
         this.viewer = this.viewers.find((viewer) => {
           return viewer ? this.stream.url.split('.')[7] === viewer.key : null
         })
+        console.log(this.viewer)
       }
     },
     postAnswer (number) {

@@ -175,6 +175,15 @@ const docClient = new AWS.DynamoDB.DocumentClient()
         ],
         labels: this.chartLabels
       }
+    },
+    computedStream () {
+      return this.stream
+    }
+  },
+  watch: {
+    computedStream () {
+      this.title = this.computedStream.title
+      this.description = this.computedStream.description
     }
   },
   mounted () {

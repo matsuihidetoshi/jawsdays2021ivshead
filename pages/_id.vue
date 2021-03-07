@@ -24,7 +24,8 @@ import StreamDetail from '~/components/streams/Detail.vue'
       if (navigator.userAgent.indexOf('iPhone') > 0) {
         this.interval = setInterval(() => {
           this.updateStream()
-        }, 60000)
+          console.log(this.stream.title)
+        }, 5000)
       }
     })
   },

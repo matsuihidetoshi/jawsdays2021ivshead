@@ -205,14 +205,15 @@ const docClient = new AWS.DynamoDB.DocumentClient()
       const playerEvent = player.getIVSEvents().PlayerEventType
       player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, (cue) => {
         const event = cue.text.split(':')[0]
-        this.questionId = cue.text.split(':')[1]
         if (event === 'Q') {
+          this.questionId = cue.text.split(':')[1]
           this.message = '↓下から投票してください！↓'
           this.snackbar = true
           this.question = true
         } else if (event === 'R') {
           this.question = false
           this.loading = true
+          this.questionId = cue.text.split(':')[1]
           this.query(this.questionId).then(() => {
             this.loading = false
             const numbers = [0, 1, 2, 3]

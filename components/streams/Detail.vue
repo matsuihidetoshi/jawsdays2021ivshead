@@ -159,7 +159,9 @@ const docClient = new AWS.DynamoDB.DocumentClient()
       questionId: null,
       questionData: null,
       title: this.stream.title || '',
-      description: this.stream.description || ''
+      description: this.stream.description || '',
+      descriptionBuffer: '',
+      updateKey: ''
     }
   },
   computed: {
@@ -249,7 +251,15 @@ const docClient = new AWS.DynamoDB.DocumentClient()
             ]
           }
         } else if (event === 'D') {
-          console.log(cue.text)
+          if (cue.text.split('::')[4] && cue.text.split('::')[4] === 'START') {
+            this.updateKey = cue.text.split('::')[2]
+            this.descriptionBuffer = cue.text.split('::')[3]
+          } else if (!cue.text.split('::')[4] && cue.text.split('::')[2] === this.updateKey) {
+            this.descriptionBuffer += cue.text.split('::')[3]
+          } else if (cue.text.split('::')[4] && cue.text.split('::')[4] === 'END') {
+            this.description = this.descriptionBuffer + cue.text.split('::')[3]
+            this.descriptionBuffer = ''
+          }
         } else if (event === 'T') {
           this.title = cue.text.split('::')[1]
         }

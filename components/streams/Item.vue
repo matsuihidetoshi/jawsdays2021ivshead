@@ -90,7 +90,7 @@ let ivs = null
     this.getViewers().then(() => {
       this.findViewer()
     })
-    if (window.navigator.userAgent.includes('iPhone')) {
+    if (navigator.userAgent.indexOf('iPhone') > 0) {
       this.interval = setInterval(() => {
         this.getViewers().then(() => {
           this.findViewer()

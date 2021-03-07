@@ -101,7 +101,7 @@ import links from '~/data/links.json'
   },
   mounted () {
     this.fetchStreams()
-    if (window.navigator.userAgent.includes('iPhone')) {
+    if (navigator.userAgent.indexOf('iPhone') > 0) {
       this.interval = setInterval(() => {
         this.updateStreams()
       }, 60000)

@@ -219,6 +219,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
           this.questionId = cue.text.split(':')[1]
           this.question = false
           this.loading = true
+          this.questionId = cue.text.split(':')[1]
           this.query(this.questionId).then(() => {
             this.loading = false
             const numbers = [0, 1, 2, 3]

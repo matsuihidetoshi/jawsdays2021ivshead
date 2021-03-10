@@ -28,7 +28,7 @@
 
     <v-chip
       v-if="viewer"
-      color="secondary"
+      :color="exciting ? 'error' : 'secondary'"
       class="
         float-right
         mr-3
@@ -36,6 +36,12 @@
       "
     >
       {{ viewer.count.slice(-1)[0] }} Viewers
+      <v-icon
+        v-if="exciting"
+        class="ml-3"
+      >
+        mdi-arrow-up-bold-circle-outline
+      </v-icon>
     </v-chip>
 
     <v-card-text
@@ -133,6 +139,11 @@ let ivs = null
               viewers[0].count
             ]
           }
+          if (this.viewer.count[0] < this.viewer.count[4]) {
+            this.exciting = true
+          } else {
+            this.exciting = false
+          }
         } else if (event === 'D') {
           if (cue.text.split('::')[4] && cue.text.split('::')[4] === 'START') {
             this.updateKey = cue.text.split('::')[2]
@@ -182,6 +193,11 @@ let ivs = null
         this.viewer = this.viewers.find((viewer) => {
           return viewer ? this.stream.url.split('.')[7] === viewer.key : null
         })
+        if (this.viewer.count[0] < this.viewer.count[4]) {
+          this.exciting = true
+        } else {
+          this.exciting = false
+        }
       }
     }
   }

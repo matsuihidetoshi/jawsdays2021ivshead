@@ -3,6 +3,7 @@
     <v-navigation-drawer
       v-model="drawer"
       :clipped="clipped"
+      width="400"
       fixed
       app
     >
@@ -10,7 +11,9 @@
         <v-list-item
           v-for="(item, i) in menu"
           :key="i"
-          :to="item.to"
+          :href="i > 0 ? item.to : null"
+          :to="i === 0 ? item.to : null"
+          :target="i === 0 ? '' : '_blank'"
           router
           exact
         >
@@ -18,8 +21,22 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title
+              class="body-2"
+              v-text="item.title"
+            />
           </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          @click="drawer = false"
+        >
+          <v-list-item-action>
+            <v-icon>mdi-arrow-left-bold-box-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-title
+            class="body-2"
+            v-text="'Close'"
+          />
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -55,7 +72,6 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import menu from '~/data/menu.json'
 import ScrollButton from '~/components/ScrollButton.vue'
-
 @Component({
   components: {
     ScrollButton
@@ -73,6 +89,5 @@ import ScrollButton from '~/components/ScrollButton.vue'
     }
   }
 })
-
 export default class Default extends Vue { }
 </script>

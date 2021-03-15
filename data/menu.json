@@ -5,18 +5,18 @@
     "to": "/"
   },
   {
-    "icon": "mdi-newspaper-variant-multiple-outline",
-    "title": "アンケート",
-    "to": "/survey"
-  },
-  {
     "icon": "mdi-information-outline",
-    "title": "About",
-    "to": "/about"
+    "title": "コミュニケーションスペース oViceへの接続方法",
+    "to": "https://jawsdays2021.jaws-ug.jp/ovice-tutorial/"
   },
   {
-    "icon": "mdi-help-circle-outline",
-    "title": "お問い合わせ",
-    "to": "/contact"
+    "icon": "mdi-frequently-asked-questions",
+    "title": "Ask the Speaker / Ask the Expert はこちら",
+    "to": "https://jawsdays2021.jaws-ug.jp/ovice-tutorial/"
+  },
+  {
+    "icon": "mdi-translate",
+    "title": "Jeff Barrセッション日本語同時通訳はこちら",
+    "to": "https://jawsdays2021.jaws-ug.jp/transration/"
   }
 ]

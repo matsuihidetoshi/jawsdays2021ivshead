@@ -15,10 +15,12 @@
       :style="'display: ' + hide(stream.active)"
     />
 
-    <v-card-title
-      class="text-truncate"
-    >
-      {{ title }}
+    <v-card-title>
+      <span
+        class="text-truncate"
+      >
+        {{ title }}
+      </span>
       <span
         v-if="!stream.active"
       >

@@ -27,7 +27,11 @@
     />
 
     <v-card-title>
-      {{ title }}
+      <span
+        class="text-truncate"
+      >
+        {{ title }}
+      </span>
       <span
         v-if="!stream.active"
       >

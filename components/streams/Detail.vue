@@ -32,6 +32,7 @@
       >
         {{ title }}
       </span>
+
       <span
         v-if="!stream.active"
       >

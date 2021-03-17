@@ -77,6 +77,7 @@ let ivs = null
   },
   data () {
     return {
+      player: null,
       viewers: [],
       viewer: null,
       interval: null,
@@ -120,15 +121,16 @@ let ivs = null
   },
   beforeDestroy () {
     clearInterval(this.interval)
+    this.stopStream()
   },
   methods: {
     startStream (stream, index) {
-      const player = videojs(`video-player-${index}-${this.timestamp}`, {
+      this.player = videojs(`video-player-${index}-${this.timestamp}`, {
         techOrder: ['AmazonIVS']
       })
-      player.enableIVSQualityPlugin()
-      const playerEvent = player.getIVSEvents().PlayerEventType
-      player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, (cue) => {
+      this.player.enableIVSQualityPlugin()
+      const playerEvent = this.player.getIVSEvents().PlayerEventType
+      this.player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, (cue) => {
         const event = cue.text.split(':')[0]
         if (event === 'V') {
           const viewers = JSON.parse(cue.text.split('::')[1])
@@ -161,8 +163,12 @@ let ivs = null
           this.title = cue.text.split('::')[1]
         }
       })
-      player.src(stream.url)
+      this.player.src(stream.url)
       this.$emit('finish')
+    },
+    stopStream () {
+      this.player.pause()
+      this.player.src('')
     },
     hide (active) {
       if (active) {

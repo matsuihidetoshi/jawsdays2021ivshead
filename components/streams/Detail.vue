@@ -137,6 +137,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
   },
   data () {
     return {
+      player: null,
       timestamp: new Date().getTime(),
       viewers: [],
       viewer: null,
@@ -223,15 +224,16 @@ const docClient = new AWS.DynamoDB.DocumentClient()
   },
   beforeDestroy () {
     clearInterval(this.interval)
+    this.stopStream()
   },
   methods: {
     startStream (stream) {
-      const player = videojs(`video-player-${this.timestamp}`, {
+      this.player = videojs(`video-player-${this.timestamp}`, {
         techOrder: ['AmazonIVS']
       })
-      player.enableIVSQualityPlugin()
-      const playerEvent = player.getIVSEvents().PlayerEventType
-      player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, (cue) => {
+      this.player.enableIVSQualityPlugin()
+      const playerEvent = this.player.getIVSEvents().PlayerEventType
+      this.player.getIVSPlayer().addEventListener(playerEvent.TEXT_METADATA_CUE, (cue) => {
         const event = cue.text.split(':')[0]
         if (event === 'Q') {
           this.questionId = cue.text.split(':')[1]
@@ -290,7 +292,11 @@ const docClient = new AWS.DynamoDB.DocumentClient()
           this.title = cue.text.split('::')[1]
         }
       })
-      player.src(stream.url)
+      this.player.src(stream.url)
+    },
+    stopStream () {
+      this.player.pause()
+      this.player.src('')
     },
     hide (active) {
       if (active) {

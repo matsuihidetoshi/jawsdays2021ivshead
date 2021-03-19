@@ -2,12 +2,12 @@
   {
     "to": "https://www.facebook.com/jawsug/",
     "text": "Facebook",
-    "icon": "mdi-twitter"
+    "icon": "mdi-facebook"
   },
   {
     "to": "https://twitter.com/jawsdays/",
     "text": "Twitter",
-    "icon": "mdi-facebook"
+    "icon": "mdi-twitter"
   },
   {
     "to": "https://note.com/jawsdays2021/",

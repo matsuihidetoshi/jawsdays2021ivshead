@@ -3,7 +3,7 @@
     <v-navigation-drawer
       v-model="drawer"
       :clipped="clipped"
-      width="400"
+      width="420"
       fixed
       app
     >
